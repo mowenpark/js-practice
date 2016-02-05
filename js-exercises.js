@@ -5,42 +5,44 @@ function Clock () {
   // 2. Store the hours, minutes, and seconds.
   // 3. Call printTime.
   // 4. Schedule the tick at 1 second intervals.
-  var date = new Date(),
-  clock = this,
-  seconds = date.getSeconds(),
-  minutes = date.getSeconds(),
-  hours = date.getSeconds();
-  this.printTime(seconds, minutes, hours);
-  clock._tick(seconds, minutes, hours);
+  var date = new Date();
+  this.seconds = date.getSeconds();
+  this.minutes = date.getMinutes();
+  this.hours = date.getHours();
+  // this.printTime();
+  this._tick();
 }
 
-Clock.prototype.printTime = function (seconds, minutes, hours) {
+Clock.prototype.printTime = function () {
   // Format the time in HH:MM:SS
   // Use console.log to print it.
   var newTime = new Date();
-  newTime.setSeconds(seconds);
-  newTime.setMinutes(minutes);
-  newTime.setHours(hours);
+  newTime.setSeconds(this.seconds);
+  newTime.setMinutes(this.minutes);
+  newTime.setHours(this.hours);
   console.log(newTime.toTimeString());
 };
 
-Clock.prototype._tick = function (seconds, minutes, hours) {
+Clock.prototype._tick = function () {
   // 1. Increment the time by one second.
   // 2. Call printTime.
-  seconds++;
-  if (seconds >= 60) {
-    minutes++;
-    seconds = 0;
+  this.seconds++;
+  if (this.seconds >= 60) {
+    this.minutes++;
+    this.seconds = 0;
   }
-  if (minutes >= 60) {
-    hours++;
-    minutes = 0;
+  if (this.minutes >= 60) {
+    this.hours++;
+    this.minutes = 0;
   }
-  if (hours >= 24) {
-    hours = 0;
+  if (this.hours >= 24) {
+    this.hours = 0;
   }
-  this.printTime(seconds, minutes, hours);
-  global.setTimeout( function() {clock._tick(seconds, minutes, hours);}, 1000);
+  this.printTime();
+
+  setTimeout(function () {
+    this._tick();
+  }.bind(this), 1000);
 };
 
 var clock = new Clock();
